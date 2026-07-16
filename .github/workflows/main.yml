@@ -22,10 +22,10 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Remove node_modules and package-lock.json
+      - name: Clean node_modules only
+        # Eliminamos SOLO node_modules para limpiar caché viejo, pero CONSERVAMOS package-lock.json
         run: |
           if (Test-Path node_modules) { Remove-Item -Recurse -Force node_modules }
-          if (Test-Path package-lock.json) { Remove-Item -Force package-lock.json }
         working-directory: ./sitio_pruebas
 
       # La acción oficial se encarga de instalar, levantar el servidor, esperar y testear:
