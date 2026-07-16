@@ -1,0 +1,39 @@
+name: Pruebas Cypress
+on:
+  push:
+    branches: 
+      - main
+  pull_request: 
+    branches:
+      - main
+
+  workflow_dispatch: 
+
+jobs:
+  cypress-run:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.2.0
+        with:
+          node-version: '22'
+
+      - name: Clean node_modules only
+        # Eliminamos SOLO node_modules para limpiar caché viejo, pero CONSERVAMOS package-lock.json
+        run: |
+          if (Test-Path node_modules) { Remove-Item -Recurse -Force node_modules }
+        working-directory: ./sitio_pruebas
+
+      # La acción oficial se encarga de instalar, levantar el servidor, esperar y testear:
+      - name: Run Cypress Tests
+        uses: cypress-io/github-action@v6.7.0
+        with:
+          working-directory: ./sitio_pruebas
+          #build: npm run build # Opcional: si necesitas compilar antes
+          start: npm run dev
+          wait-on: 'http://localhost:5173'
+          wait-on-timeout: 60
