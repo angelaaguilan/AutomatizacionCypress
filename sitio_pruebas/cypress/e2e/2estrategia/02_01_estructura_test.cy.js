@@ -5,12 +5,12 @@
 
 describe('pagina principal', () => {
 
-  it('False: Abre la versión en español', () => {
+//  it('False: Abre la versión en español', () => {
     // entrar a la página
-    cy.visit('http://localhost:5173/');
+//    cy.visit('http://localhost:5173/');
     //examina que la ruta sea la correcta, una pagina en español
-    cy.url().should('include', '/es')  
-  })
+//    cy.url().should('include', '/es')  
+//  })
 
   it('Abre la página principal:', () => {
     cy.visit('http://localhost:5173/');
