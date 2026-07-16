@@ -32,14 +32,17 @@ jobs:
         run: npm install
         working-directory: ./sitio_pruebas
 
-      - name: Start the application
-        run: npm run dev &
+      - name: Start the application (Windows Background)
+        # Usamos PowerShell para levantar el servidor de desarrollo en un proceso independiente
+        run: |
+          Start-Process -FilePath "npm" -ArgumentList "run dev" -NoNewWindow
         working-directory: ./sitio_pruebas
         env:
           CI: true
 
       - name: Wait for the application to be ready
-        run: npx wait on http://localhost:5173
+        # Corregido a 'wait-on' con guion
+        run: npx wait-on http://localhost:5173
         working-directory: ./sitio_pruebas
 
       - name: Run Cypress tests
