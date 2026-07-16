@@ -28,23 +28,12 @@ jobs:
           if (Test-Path package-lock.json) { Remove-Item -Force package-lock.json }
         working-directory: ./sitio_pruebas
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./sitio_pruebas
-
-      - name: Start the application (Windows Background)
-        # Usamos PowerShell para levantar el servidor de desarrollo en un proceso independiente
-        run: |
-          Start-Process -FilePath "npm" -ArgumentList "run dev" -NoNewWindow
-        working-directory: ./sitio_pruebas
-        env:
-          CI: true
-
-      - name: Wait for the application to be ready
-        # Corregido a 'wait-on' con guion
-        run: npx wait-on http://localhost:5173
-        working-directory: ./sitio_pruebas
-
-      - name: Run Cypress tests
-        run: npx cypress run
-        working-directory: ./sitio_pruebas
+      # La acción oficial se encarga de instalar, levantar el servidor, esperar y testear:
+      - name: Run Cypress Tests
+        uses: cypress-io/github-action@v6.7.0
+        with:
+          working-directory: ./sitio_pruebas
+          #build: npm run build # Opcional: si necesitas compilar antes
+          start: npm run dev
+          wait-on: 'http://localhost:5173'
+          wait-on-timeout: 60
